@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="theme-color" content="#dc2626">
+<title>ကလေးများ သင်ထောက်ကူ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; word-break: keep-all !important; overflow-wrap: break-word !important; white-space: normal !important; line-break: strict; }
+  body { font-family: 'Pyidaungsu', 'Myanmar Text', 'Myanmar3', 'Padauk', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); min-height: 100vh; padding: 12px; color: #422006; -webkit-font-smoothing: antialiased; }
+  .app { width: 100%; max-width: 600px; margin: 0 auto; padding-bottom: 90px; }
+  
+  .header { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; padding: 16px; border-radius: 16px 16px 0 0; position: relative; }
+  .header h1 { font-size: clamp(16px, 4vw, 20px); margin-bottom: 6px; padding-right: 70px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header .date { font-size: clamp(11px, 3vw, 13px); opacity: 0.9; padding-right: 70px; line-height: 1.4; }
+  .header .menu-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; }
+  .header .grade-btn { position: absolute; top: 52px; right: 12px; background: rgba(255,255,255,0.2); border: none; color: white; height: 28px; padding: 0 10px; border-radius: 14px; font-size: 11px; cursor: pointer; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+
+  .book { background: #fffbeb; border-radius: 0 0 16px 16px; padding: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-height: 60vh; }
+  
+  .search-box { position: relative; margin-bottom: 12px; }
+  .search-box input { width: 100%; padding: 10px 36px 10px 36px; border: 2px solid #fbbf24; border-radius: 12px; font-size: 14px; outline: none; background: white; }
+  .search-box .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+  .search-box .clear-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #fef3c7; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; display: none; }
+  .search-box .clear-btn.show { display: block; }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: 0 0 auto; padding: 8px 12px; border: 2px solid #fbbf24; background: white; border-radius: 10px; font-size: 13px; font-weight: bold; color: #92400e; cursor: pointer; white-space: nowrap; }
+  .tab.active { background: #f59e0b; color: white; border-color: #b45309; }
+
+  .progress-bar { background: #fef3c7; border-radius: 8px; height: 6px; margin-bottom: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #f59e0b, #dc2626); border-radius: 8px; transition: width 0.3s; }
+  .progress-text { font-size: 12px; color: #78716c; margin-bottom: 12px; text-align: center; }
+
+  .lesson-card { background: white; border-radius: 12px; padding: 12px; margin-bottom: 10px; border-left: 5px solid #f59e0b; box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 10px; }
+  .lesson-icon { font-size: 24px; flex-shrink: 0; }
+  .lesson-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .lesson-title { font-weight: bold; font-size: clamp(13px, 3.5vw, 15px); word-break: normal; overflow-wrap: anywhere; white-space: normal; line-height: 1.5; }
+  .lesson-meta { font-size: 11px; color: #78716c; }
+  .lesson-actions { display: flex; gap: 4px; flex-shrink: 0; }
+  .btn-icon { background: #fef3c7; border: none; border-radius: 8px; padding: 6px; font-size: 14px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+  .btn-icon.danger { background: #fee2e2; }
+  .photo-preview { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 2px solid #fbbf24; flex-shrink: 0; cursor: pointer; }
+
+  .empty { text-align: center; padding: 40px 20px; color: #a8a29e; }
+  .empty .emoji { font-size: 48px; display: block; margin-bottom: 8px; }
+  .fab { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; border: none; font-size: 24px; box-shadow: 0 6px 16px rgba(220,38,38,0.4); display: flex; align-items: center; justify-content: center; z-index: 50; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; padding: 12px; z-index: 100; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: white; border-radius: 16px; padding: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+  .modal h2 { font-size: 16px; margin-bottom: 12px; color: #92400e; }
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #57534e; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 2px solid #e7e5e4; border-radius: 8px; font-size: 14px; outline: none; }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+  .form-row { display: flex; gap: 8px; }
+  .form-row > * { flex: 1; min-width: 0; }
+  .modal-btns { display: flex; gap: 8px; margin-top: 16px; }
+  .btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; }
+  .btn-primary { background: #dc2626; color: white; }
+  .btn-secondary { background: #e7e5e4; color: #44403c; }
+  .img-preview { width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px; margin-top: 8px; display: none; }
+  .img-preview.show { display: block; }
+
+  .subject-row { display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid #e7e5e4; border-radius: 10px; margin-bottom: 8px; }
+  .subject-row .subj-info { flex: 1; min-width: 0; }
+  .subject-row .subj-name { font-weight: bold; font-size: 14px; }
+  .subject-row .subj-grade { font-size: 11px; color: #78716c; }
+  .subject-row .subj-count { font-size: 11px; color: #78716c; margin-right: 4px; }
+  .menu-item { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; border: 1px solid #e7e5e4; margin-bottom: 6px; background: #fafaf9; cursor: pointer; }
+  .menu-item .menu-icon { font-size: 20px; }
+  .menu-item .menu-text { flex: 1; font-weight: bold; font-size: 14px; }
+  .menu-item .menu-desc { font-size: 11px; color: #78716c; display: block; font-weight: normal; }
+
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1c1917; color: white; padding: 10px 16px; border-radius: 20px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 200; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .status-bar { text-align: center; font-size: 10px; color: #a8a29e; margin-top: 8px; }
+  .viewer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300; display: none; align-items: center; justify-content: center; overflow: hidden; touch-action: none; }
+  .viewer-overlay.show { display: flex; }
+  .viewer-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .viewer-controls { position: absolute; top: 16px; right: 16px; }
+  .viewer-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.15); border: none; color: white; font-size: 18px; }
+
+  @media (max-width: 360px) {
+    body { padding: 8px; }
+    .lesson-card { padding: 10px; gap: 8px; }
+    .lesson-icon { font-size: 20px; }
+    .btn-icon { width: 28px; height: 28px; font-size: 12px; padding: 4px; }
+    .photo-preview { width: 40px; height: 40px; }
+    .lesson-title { font-size: 13px; }
+    .tab { padding: 6px 10px; font-size: 12px; }
+    .modal { padding: 12px; }
+  }
+  @media (min-width: 480px) {
+    .lesson-card { padding: 16px; gap: 14px; }
+    .lesson-icon { font-size: 28px; }
+    .lesson-title { font-size: 16px; }
+    .lesson-meta { font-size: 13px; }
+    .btn-icon { width: 36px; height: 36px; font-size: 16px; }
+    .photo-preview { width: 60px; height: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loading" style="position:fixed;inset:0;background:#0ea5e9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;z-index:999;font-weight:bold;color:#ffffff;text-align:center;">
+  <img src="assets/splash.png" alt="Splash Screen" style="max-width:85%;max-height:72vh;object-fit:contain;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+  <div style="font-size:15px;">⏳ Database ဖွင့်နေသည်...</div>
+</div>
+
+<div class="app">
+  <div class="header">
+    <h1>📚 သင်ခန်းစာအုပ်</h1>
+    <div class="date" id="todayDate"></div>
+    <button class="grade-btn" id="gradeBtn">📚 အတန်း: အားလုံး</button>
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </div>
+
+  <div class="book">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="သင်ခန်းစာ ရှာရန်...">
+      <button class="clear-btn" id="clearSearchBtn">✕</button>
+    </div>
+
+    <div class="tabs" id="tabs"></div>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-text" id="progressText">ယနေ့ သင်ခန်းစာ 0/0 ပြီးစီး</div>
+    
+    <div id="lessonList"></div>
+    <div class="status-bar" id="statusBar"></div>
+  </div>
+</div>
+
+<button class="fab" id="addBtn">+</button>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2 id="modalTitle">သင်ခန်းစာ အသစ်ထည့်</h2>
+    <input type="hidden" id="editId">
+
+    <div class="form-group">
+      <label>ဘာသာရပ်</label>
+      <select id="subject"></select>
+    </div>
+    <div class="form-group">
+      <label>သင်ခန်းစာ ခေါင်းစဉ်</label>
+      <input type="text" id="title" placeholder="ဥပမာ - အခန်း ၁" maxlength="100">
+    </div>
+    <div class="form-group">
+      <label>ရက်စွဲ</label>
+      <input type="date" id="lessonDate">
+    </div>
+    <div class="form-group">
+      <label>မှတ်ချက်</label>
+      <textarea id="note" placeholder="အသေးစိတ်..." maxlength="500"></textarea>
+    </div>
+    <div class="form-group">
+      <label>📷 ဓာတ်ပုံ</label>
+      <input type="file" id="photo" accept="image/*" capture="environment">
+      <img id="imgPreview" class="img-preview">
+      <button type="button" class="btn btn-secondary" id="removePhotoBtn" style="display:none;margin-top:6px;padding:6px;font-size:11px;">ဓာတ်ပုံ ဖျက်</button>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" id="cancelBtn">မလုပ်တော့</button>
+      <button class="btn btn-primary" id="saveBtn">သိမ်းမည်</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="subjectModal">
+  <div class="modal">
+    <h2>📚 ဘာသာရပ် စီမံ</h2>
+    <div id="subjectList"></div>
+    <h2 style="margin-top:12px;font-size:14px;">➕ အသစ်ထည့်</h2>
+    <div class="form-group">
+      <input type="text" id="newSubjectName" placeholder="ဘာသာရပ် အမည်" maxlength="30">
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:0 0 60px;">
+        <input type="text" id="newSubjectIcon" value="📘" maxlength="4" style="text-align:center;">
+      </div>
+      <div class="form-group">
+        <input type="text" id="newSubjectGrade" placeholder="အတန်း (ဥပမာ - ၁တန်း)" maxlength="20">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" id="closeSubjectBtn">ပိတ်</button>
+      <button class="btn btn-primary" id="addSubjectBtn">ထည့်မည်</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="gradeModal">
+  <div class="modal">
+    <h2>🎓 အတန်း ရွေးချယ်</h2>
+    <div id="gradeList"></div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" id="closeGradeBtn">ပိတ်</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="menuModal">
+  <div class="modal">
+    <h2>⚙️ ဆက်တင်</h2>
+    <div class="menu-item" id="backupBtn"><span class="menu-icon">💾</span><div class="menu-text">Backup<span class="menu-desc">ဒေတာ သိမ်းယူ</span></div></div>
+    <div class="menu-item" id="restoreBtn"><span class="menu-icon">📥</span><div class="menu-text">Restore<span class="menu-desc">ဒေတာ ပြန်ထည့်</span></div></div>
+    <div class="menu-item" id="clearAllBtn" style="border-color:#fecaca;"><span class="menu-icon">🗑️</span><div class="menu-text" style="color:#dc2626;">ဒေတာ အားလုံးဖျက်<span class="menu-desc">အားလုံး ပြန်စ</span></div></div>
+    <input type="file" id="restoreInput" accept=".json" style="display:none;">
+    <div class="modal-btns">
+      <button class="btn btn-secondary" id="closeMenuBtn">ပိတ်</button>
+    </div>
+  </div>
+</div>
+
+<div class="viewer-overlay" id="viewer">
+  <div class="viewer-controls"><button class="viewer-btn" id="viewerClose">✕</button></div>
+  <img class="viewer-img" id="viewerImg">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// Database (IndexedDB) - Safe Init with Error Handling
+// ============================================================
+const DB_NAME = 'KidLessonDB';
+const DB_VER = 2;
+let db;
+
+function initDB() {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      const req = indexedDB.open(DB_NAME, DB_VER);
+      req.onupgradeneeded = e => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains('subjects')) {
+          d.createObjectStore('subjects', { keyPath: 'id', autoIncrement: true });
+        }
+        if (!d.objectStoreNames.contains('lessons')) {
+          const l = d.createObjectStore('lessons', { keyPath: 'id', autoIncrement: true });
+          l.createIndex('subjectId', 'subjectId');
+          l.createIndex('date', 'date');
+        }
+      };
+      req.onsuccess = () => res(req.result);
+      req.onerror = () => rej(req.error);
+    }, 100);
+  });
+}
+
+function dbRequest(req) {
+  return new Promise((res, rej) => {
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+
+function dbGetAll(store) {
+  return dbRequest(db.transaction(store, 'readonly').objectStore(store).getAll());
+}
+function dbAdd(store, item) {
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).add(item));
+}
+function dbPut(store, item) {
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).put(item));
+}
+function dbGet(store, id) {
+  return dbRequest(db.transaction(store, 'readonly').objectStore(store).get(id));
+}
+function dbDel(store, id) {
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).delete(id));
+}
+function dbClear(store) {
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).clear());
+}
+
+// ============================================================
+// App Logic
+// ============================================================
+let subjects = [];
+let lessons = [];
+let currentFilter = 'all';
+let currentGrade = 'all';
+let searchQuery = '';
+let editingImageData = null;
+let toastTimer = null;
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function formatDateDisplay(dateStr) {
+  if (!dateStr) return '';
+  if (dateStr === todayISO()) return '📌 ယနေ့';
+  try {
+    const parts = dateStr.split('-');
+    const d = new Date(parts[0], parts[1]-1, parts[2]);
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  } catch { return dateStr; }
+}
+
+async function loadData() {
+  subjects = await dbGetAll('subjects');
+  lessons = await dbGetAll('lessons');
+}
+
+function renderDate() {
+  const d = new Date();
+  const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  document.getElementById('todayDate').textContent = dateStr;
+}
+
+function renderTabs() {
+  const tabs = document.getElementById('tabs');
+  let filteredSubs = currentGrade === 'all' ? subjects : subjects.filter(s => (s.grade||'') === currentGrade);
+  
+  let html = `<button class="tab ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">📖 အားလုံး</button>`;
+  html += filteredSubs.map(s => 
+    `<button class="tab ${currentFilter===String(s.id)?'active':''}" onclick="setFilter('${s.id}')">${s.icon} ${s.name}</button>`
+  ).join('');
+  html += `<button class="tab tab-manage" onclick="openSubjectModal()">⚙️ ဘာသာရပ်</button>`;
+  tabs.innerHTML = html;
+}
+
+function setFilter(id) {
+  currentFilter = id;
+  renderTabs();
+  renderLessons();
+}
+
+function renderLessons() {
+  const list = document.getElementById('lessonList');
+  const today = todayISO();
+  
+  let filteredSubs = currentGrade === 'all' ? subjects : subjects.filter(s => (s.grade||'') === currentGrade);
+  const subIds = new Set(filteredSubs.map(s => s.id));
+
+  let filtered = lessons.filter(l => {
+    if (!subIds.has(l.subjectId)) return false;
+    if (currentFilter !== 'all' && String(l.subjectId) !== currentFilter) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const sub = subjects.find(s => s.id === l.subjectId);
+      return (l.title||'').toLowerCase().includes(q) || 
+             (l.note||'').toLowerCase().includes(q) || 
+             (sub && sub.name.toLowerCase().includes(q));
+    }
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    if (a.date === today && b.date !== today) return -1;
+    if (b.date === today && a.date !== today) return 1;
+    return b.date.localeCompare(a.date);
+  });
+
+  const todaySubs = lessons.filter(l => l.date === today && subIds.has(l.subjectId));
+  const doneCount = todaySubs.filter(l => l.done).length;
+  document.getElementById('progressFill').style.width = (todaySubs.length ? (doneCount/todaySubs.length*100) : 0) + '%';
+  document.getElementById('progressText').textContent = `ယနေ့ သင်ခန်းစာ ${doneCount}/${todaySubs.length} ပြီးစီး`;
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty"><span class="emoji">📝</span>သင်ခန်းစာ မရှိသေးပါ။<br>အောက်က + ကိုနှိပ်ပါ။</div>`;
+    document.getElementById('statusBar').textContent = `Offline • သင်ခန်းစာ ${lessons.length} ခု`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(l => {
+    const sub = subjects.find(s => s.id === l.subjectId) || { icon: '📖', name: '?' };
+    const photoHtml = l.photo ? `<img src="${l.photo}" class="photo-preview" onclick="viewPhoto(${l.id})">` : '';
+    return `<div class="lesson-card" style="${l.done?'opacity:0.6':''}">
+      <div class="lesson-icon">${sub.icon}</div>
+      <div class="lesson-info">
+        <div class="lesson-title" style="${l.done?'text-decoration:line-through':''}">${l.title}</div>
+        <div class="lesson-meta">${sub.name} • ${formatDateDisplay(l.date)}</div>
+      </div>
+      ${photoHtml}
+      <div class="lesson-actions">
+        <button class="btn-icon" onclick="toggleDone(${l.id})">${l.done?'✅':'⬜'}</button>
+        <button class="btn-icon" onclick="editLesson(${l.id})">✏️</button>
+        <button class="btn-icon danger" onclick="deleteLesson(${l.id})">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+  
+  document.getElementById('statusBar').textContent = `Offline • သင်ခန်းစာ ${lessons.length} ခု`;
+}
+
+async function toggleDone(id) {
+  const l = await dbGet('lessons', id);
+  if (l) { l.done = l.done ? 0 : 1; await dbPut('lessons', l); await loadData(); renderLessons(); }
+}
+
+async function deleteLesson(id) {
+  if (!confirm('ဖျက်မှာ သေချာလား?')) return;
+  await dbDel('lessons', id);
+  await loadData(); renderLessons();
+  showToast('သင်ခန်းစာ ဖျက်ပြီးပါပြီ');
+}
+
+async function editLesson(id) {
+  const l = await dbGet('lessons', id);
+  if (!l) return;
+  document.getElementById('editId').value = l.id;
+  document.getElementById('subject').innerHTML = subjects.map(s => 
+    `<option value="${s.id}" ${s.id===l.subjectId?'selected':''}>${s.icon} ${s.name}</option>`
+  ).join('');
+  document.getElementById('title').value = l.title;
+  document.getElementById('lessonDate').value = l.date;
+  document.getElementById('note').value = l.note || '';
+  editingImageData = l.photo || null;
+  
+  const preview = document.getElementById('imgPreview');
+  if (l.photo) { preview.src = l.photo; preview.classList.add('show'); document.getElementById('removePhotoBtn').style.display='block'; }
+  else { preview.classList.remove('show'); document.getElementById('removePhotoBtn').style.display='none'; }
+  
+  document.getElementById('modalTitle').textContent = 'ပြင်ဆင်မည်';
+  document.getElementById('modal').classList.add('show');
+}
+
+function viewPhoto(id) {
+  dbGet('lessons', id).then(l => {
+    if (l && l.photo) {
+      document.getElementById('viewerImg').src = l.photo;
+      document.getElementById('viewer').classList.add('show');
+    }
+  });
+}
+
+document.getElementById('addBtn').onclick = () => {
+  document.getElementById('editId').value = '';
+  document.getElementById('subject').innerHTML = subjects.map(s => `<option value="${s.id}">${s.icon} ${s.name}</option>`).join('');
+  document.getElementById('title').value = '';
+  document.getElementById('lessonDate').value = todayISO();
+  document.getElementById('note').value = '';
+  editingImageData = null;
+  document.getElementById('imgPreview').classList.remove('show');
+  document.getElementById('removePhotoBtn').style.display='none';
+  document.getElementById('modalTitle').textContent = 'သင်ခန်းစာ အသစ်ထည့်';
+  document.getElementById('modal').classList.add('show');
+};
+
+document.getElementById('cancelBtn').onclick = () => document.getElementById('modal').classList.remove('show');
+
+document.getElementById('photo').onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const scale = Math.min(1, 800 / img.width);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      editingImageData = canvas.toDataURL('image/jpeg', 0.7);
+      document.getElementById('imgPreview').src = editingImageData;
+      document.getElementById('imgPreview').classList.add('show');
+      document.getElementById('removePhotoBtn').style.display='block';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+document.getElementById('removePhotoBtn').onclick = () => {
+  editingImageData = null;
+  document.getElementById('imgPreview').classList.remove('show');
+  document.getElementById('removePhotoBtn').style.display='none';
+  document.getElementById('photo').value = '';
+};
+
+document.getElementById('saveBtn').onclick = async () => {
+  const id = document.getElementById('editId').value;
+  const subjectId = Number(document.getElementById('subject').value);
+  const title = document.getElementById('title').value.trim();
+  const date = document.getElementById('lessonDate').value;
+  const note = document.getElementById('note').value.trim();
+  
+  if (!subjectId || !title || !date) return showToast('ဘာသာရပ်၊ ခေါင်းစဉ်နှင့် ရက်စွဲ ဖြည့်ပါ');
+  
+  if (id) {
+    const existing = await dbGet('lessons', Number(id));
+    await dbPut('lessons', { ...existing, subjectId, title, date, note, photo: editingImageData });
+    showToast('ပြင်ဆင်ပြီးပါပြီ');
+  } else {
+    await dbAdd('lessons', { subjectId, title, date, note, photo: editingImageData, done: 0, createdAt: Date.now() });
+    showToast('သင်ခန်းစာ သိမ်းပြီးပါပြီ');
+  }
+  await loadData();
+  renderLessons();
+  document.getElementById('modal').classList.remove('show');
+};
+
+function openSubjectModal() {
+  const list = document.getElementById('subjectList');
+  list.innerHTML = subjects.map(s => {
+    const cnt = lessons.filter(l => l.subjectId === s.id).length;
+    return `<div class="subject-row">
+      <span style="font-size:20px;">${s.icon}</span>
+      <div class="subj-info">
+        <div class="subj-name">${s.name}</div>
+        <div class="subj-grade">${s.grade || ''}</div>
+      </div>
+      <span class="subj-count">${cnt} ခု</span>
+      <button class="btn-icon danger" onclick="deleteSubject(${s.id})">🗑️</button>
+    </div>`;
+  }).join('');
+  document.getElementById('subjectModal').classList.add('show');
+}
+
+document.getElementById('closeSubjectBtn').onclick = () => document.getElementById('subjectModal').classList.remove('show');
+
+document.getElementById('addSubjectBtn').onclick = async () => {
+  const name = document.getElementById('newSubjectName').value.trim();
+  const icon = document.getElementById('newSubjectIcon').value.trim() || '📘';
+  const grade = document.getElementById('newSubjectGrade').value.trim();
+  if (!name) return showToast('ဘာသာရပ် အမည် ထည့်ပါ');
+  await dbAdd('subjects', { name, icon, grade, createdAt: Date.now() });
+  document.getElementById('newSubjectName').value = '';
+  await loadData();
+  openSubjectModal();
+  renderTabs();
+  showToast('ဘာသာရပ် ထည့်ပြီးပါပြီ');
+};
+
+async function deleteSubject(id) {
+  if (!confirm('ဘာသာရပ်နဲ့ သက်ဆိုင်တဲ့ သင်ခန်းစာတွေပါ ဖျက်မှာလား?')) return;
+  const rel = lessons.filter(l => l.subjectId === id);
+  for (const l of rel) await dbDel('lessons', l.id);
+  await dbDel('subjects', id);
+  await loadData();
+  openSubjectModal();
+  renderTabs();
+  renderLessons();
+  showToast('ဘာသာရပ် ဖျက်ပြီးပါပြီ');
+}
+
+document.getElementById('gradeBtn').onclick = () => {
+  const grades = [...new Set(subjects.map(s => s.grade).filter(Boolean))];
+  let html = `<div class="menu-item" onclick="setGrade('all')"><span class="menu-icon">📚</span><div class="menu-text">အားလုံး</div></div>`;
+  html += grades.map(g => `<div class="menu-item" onclick="setGrade('${g}')"><span class="menu-icon">🎓</span><div class="menu-text">${g}</div></div>`).join('');
+  document.getElementById('gradeList').innerHTML = html;
+  document.getElementById('gradeModal').classList.add('show');
+};
+
+function setGrade(g) {
+  currentGrade = g;
+  currentFilter = 'all';
+  document.getElementById('gradeBtn').textContent = `📚 အတန်း: ${g === 'all' ? 'အားလုံး' : g}`;
+  document.getElementById('gradeModal').classList.remove('show');
+  renderTabs();
+  renderLessons();
+}
+
+document.getElementById('closeGradeBtn').onclick = () => document.getElementById('gradeModal').classList.remove('show');
+
+document.getElementById('menuBtn').onclick = () => document.getElementById('menuModal').classList.add('show');
+document.getElementById('closeMenuBtn').onclick = () => document.getElementById('menuModal').classList.remove('show');
+document.getElementById('backupBtn').onclick = () => {
+  const data = { subjects, lessons };
+  const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `backup-${todayISO()}.json`;
+  a.click();
+  showToast('Backup ဖိုင် ထုတ်ယူပြီးပါပြီ');
+};
+document.getElementById('restoreBtn').onclick = () => document.getElementById('restoreInput').click();
+document.getElementById('restoreInput').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  const data = JSON.parse(text);
+  await dbClear('lessons'); await dbClear('subjects');
+  for (const s of data.subjects) await dbAdd('subjects', s);
+  for (const l of data.lessons) await dbAdd('lessons', l);
+  await loadData(); renderTabs(); renderLessons();
+  document.getElementById('menuModal').classList.remove('show');
+  showToast('ဒေတာ ပြန်ထည့်ပြီးပါပြီ');
+};
+document.getElementById('clearAllBtn').onclick = async () => {
+  if (!confirm('အားလုံး ဖျက်မှာ သေချာလား?')) return;
+  await dbClear('lessons'); await dbClear('subjects');
+  await loadData(); renderTabs(); renderLessons();
+  document.getElementById('menuModal').classList.remove('show');
+  showToast('ဒေတာ အားလုံး ဖျက်ပြီးပါပြီ');
+};
+
+document.getElementById('searchInput').oninput = function() {
+  searchQuery = this.value.trim();
+  document.getElementById('clearSearchBtn').classList.toggle('show', !!searchQuery);
+  renderLessons();
+};
+document.getElementById('clearSearchBtn').onclick = () => {
+  document.getElementById('searchInput').value = '';
+  searchQuery = '';
+  document.getElementById('clearSearchBtn').classList.remove('show');
+  renderLessons();
+};
+
+document.getElementById('viewerClose').onclick = () => {
+  document.getElementById('viewer').classList.remove('show');
+  document.getElementById('viewerImg').src = '';
+};
+
+// ============================================================
+// Init
+// ============================================================
+(async () => {
+  try {
+    db = await initDB();
+    await loadData();
+    if (!subjects.length) {
+      await dbAdd('subjects', { name: 'မြန်မာစာ', icon: '🇲🇲', grade: '', createdAt: Date.now() });
+      await dbAdd('subjects', { name: 'English', icon: '🔤', grade: '', createdAt: Date.now() });
+      await dbAdd('subjects', { name: 'သင်္ချာ', icon: '🔢', grade: '', createdAt: Date.now() });
+      await loadData();
+    }
+    document.getElementById('loading').style.display = 'none';
+    renderDate();
+    renderTabs();
+    renderLessons();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('loading').style.display = 'none';
+    alert('Database ဖွင့်လို့မရပါ။ Browser ကို ပြန်ဖွင့်ကြည့်ပါ သို့မဟုတ် Incognito နဲ့ စမ်းပါ။');
+  }
+})();
+</script>
+</body>
+</html>
