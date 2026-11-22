@@ -11,7 +11,6 @@
   body { font-family: 'Pyidaungsu', 'Myanmar Text', 'Myanmar3', 'Padauk', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); min-height: 100vh; padding: 12px; color: #422006; -webkit-font-smoothing: antialiased; }
   .app { width: 100%; max-width: 600px; margin: 0 auto; padding-bottom: 90px; }
   
-  /* Header */
   .header { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; padding: 16px; border-radius: 16px 16px 0 0; position: relative; }
   .header h1 { font-size: clamp(16px, 4vw, 20px); margin-bottom: 6px; padding-right: 70px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .header .date { font-size: clamp(11px, 3vw, 13px); opacity: 0.9; padding-right: 70px; line-height: 1.4; }
@@ -20,25 +19,21 @@
 
   .book { background: #fffbeb; border-radius: 0 0 16px 16px; padding: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-height: 60vh; }
   
-  /* Search */
   .search-box { position: relative; margin-bottom: 12px; }
   .search-box input { width: 100%; padding: 10px 36px 10px 36px; border: 2px solid #fbbf24; border-radius: 12px; font-size: 14px; outline: none; background: white; }
   .search-box .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; }
   .search-box .clear-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #fef3c7; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; display: none; }
   .search-box .clear-btn.show { display: block; }
 
-  /* Tabs */
   .tabs { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
   .tabs::-webkit-scrollbar { display: none; }
   .tab { flex: 0 0 auto; padding: 8px 12px; border: 2px solid #fbbf24; background: white; border-radius: 10px; font-size: 13px; font-weight: bold; color: #92400e; cursor: pointer; white-space: nowrap; }
   .tab.active { background: #f59e0b; color: white; border-color: #b45309; }
 
-  /* Progress */
   .progress-bar { background: #fef3c7; border-radius: 8px; height: 6px; margin-bottom: 6px; overflow: hidden; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, #f59e0b, #dc2626); border-radius: 8px; transition: width 0.3s; }
   .progress-text { font-size: 12px; color: #78716c; margin-bottom: 12px; text-align: center; }
 
-  /* Lesson Card */
   .lesson-card { background: white; border-radius: 12px; padding: 12px; margin-bottom: 10px; border-left: 5px solid #f59e0b; box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 10px; }
   .lesson-icon { font-size: 24px; flex-shrink: 0; }
   .lesson-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -49,12 +44,10 @@
   .btn-icon.danger { background: #fee2e2; }
   .photo-preview { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 2px solid #fbbf24; flex-shrink: 0; cursor: pointer; }
 
-  /* Empty & FAB */
   .empty { text-align: center; padding: 40px 20px; color: #a8a29e; }
   .empty .emoji { font-size: 48px; display: block; margin-bottom: 8px; }
   .fab { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; border: none; font-size: 24px; box-shadow: 0 6px 16px rgba(220,38,38,0.4); display: flex; align-items: center; justify-content: center; z-index: 50; }
 
-  /* Modal */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; padding: 12px; z-index: 100; }
   .modal-overlay.show { display: flex; }
   .modal { background: white; border-radius: 16px; padding: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
@@ -72,7 +65,6 @@
   .img-preview { width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px; margin-top: 8px; display: none; }
   .img-preview.show { display: block; }
 
-  /* Subject Row & Menu */
   .subject-row { display: flex; align-items: center; gap: 8px; padding: 10px; border: 1px solid #e7e5e4; border-radius: 10px; margin-bottom: 8px; }
   .subject-row .subj-info { flex: 1; min-width: 0; }
   .subject-row .subj-name { font-weight: bold; font-size: 14px; }
@@ -83,7 +75,6 @@
   .menu-item .menu-text { flex: 1; font-weight: bold; font-size: 14px; }
   .menu-item .menu-desc { font-size: 11px; color: #78716c; display: block; font-weight: normal; }
 
-  /* Toast & Viewer */
   .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1c1917; color: white; padding: 10px 16px; border-radius: 20px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 200; pointer-events: none; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   .status-bar { text-align: center; font-size: 10px; color: #a8a29e; margin-top: 8px; }
@@ -115,8 +106,9 @@
 </head>
 <body>
 
-<div id="loading" style="position:fixed;inset:0;background:rgba(255,251,235,0.95);display:flex;align-items:center;justify-content:center;z-index:999;font-weight:bold;color:#92400e;">
-  ⏳ Database ဖွင့်နေသည်...
+<div id="loading" style="position:fixed;inset:0;background:#0ea5e9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;z-index:999;font-weight:bold;color:#ffffff;text-align:center;">
+  <img src="assets/splash.png" alt="Splash Screen" style="max-width:85%;max-height:72vh;object-fit:contain;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+  <div style="font-size:15px;">⏳ Database ဖွင့်နေသည်...</div>
 </div>
 
 <div class="app">
@@ -237,7 +229,7 @@
 
 <script>
 // ============================================================
-// Database (IndexedDB)
+// Database (IndexedDB) - Safe Init with Error Handling
 // ============================================================
 const DB_NAME = 'KidLessonDB';
 const DB_VER = 2;
@@ -245,58 +237,49 @@ let db;
 
 function initDB() {
   return new Promise((res, rej) => {
-    const req = indexedDB.open(DB_NAME, DB_VER);
-    req.onupgradeneeded = e => {
-      const d = e.target.result;
-      if (!d.objectStoreNames.contains('subjects')) {
-        d.createObjectStore('subjects', { keyPath: 'id', autoIncrement: true });
-      }
-      if (!d.objectStoreNames.contains('lessons')) {
-        const l = d.createObjectStore('lessons', { keyPath: 'id', autoIncrement: true });
-        l.createIndex('subjectId', 'subjectId');
-        l.createIndex('date', 'date');
-      }
-    };
+    setTimeout(() => {
+      const req = indexedDB.open(DB_NAME, DB_VER);
+      req.onupgradeneeded = e => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains('subjects')) {
+          d.createObjectStore('subjects', { keyPath: 'id', autoIncrement: true });
+        }
+        if (!d.objectStoreNames.contains('lessons')) {
+          const l = d.createObjectStore('lessons', { keyPath: 'id', autoIncrement: true });
+          l.createIndex('subjectId', 'subjectId');
+          l.createIndex('date', 'date');
+        }
+      };
+      req.onsuccess = () => res(req.result);
+      req.onerror = () => rej(req.error);
+    }, 100);
+  });
+}
+
+function dbRequest(req) {
+  return new Promise((res, rej) => {
     req.onsuccess = () => res(req.result);
     req.onerror = () => rej(req.error);
   });
 }
 
 function dbGetAll(store) {
-  return new Promise(res => {
-    const req = db.transaction(store, 'readonly').objectStore(store).getAll();
-    req.onsuccess = () => res(req.result);
-  });
+  return dbRequest(db.transaction(store, 'readonly').objectStore(store).getAll());
 }
 function dbAdd(store, item) {
-  return new Promise(res => {
-    const req = db.transaction(store, 'readwrite').objectStore(store).add(item);
-    req.onsuccess = () => res(req.result);
-  });
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).add(item));
 }
 function dbPut(store, item) {
-  return new Promise(res => {
-    const req = db.transaction(store, 'readwrite').objectStore(store).put(item);
-    req.onsuccess = () => res(req.result);
-  });
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).put(item));
 }
 function dbGet(store, id) {
-  return new Promise(res => {
-    const req = db.transaction(store, 'readonly').objectStore(store).get(id);
-    req.onsuccess = () => res(req.result);
-  });
+  return dbRequest(db.transaction(store, 'readonly').objectStore(store).get(id));
 }
 function dbDel(store, id) {
-  return new Promise(res => {
-    const req = db.transaction(store, 'readwrite').objectStore(store).delete(id);
-    req.onsuccess = () => res();
-  });
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).delete(id));
 }
 function dbClear(store) {
-  return new Promise(res => {
-    const req = db.transaction(store, 'readwrite').objectStore(store).clear();
-    req.onsuccess = () => res();
-  });
+  return dbRequest(db.transaction(store, 'readwrite').objectStore(store).clear());
 }
 
 // ============================================================
@@ -308,6 +291,15 @@ let currentFilter = 'all';
 let currentGrade = 'all';
 let searchQuery = '';
 let editingImageData = null;
+let toastTimer = null;
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
 
 function todayISO() {
   const d = new Date();
@@ -420,6 +412,7 @@ async function deleteLesson(id) {
   if (!confirm('ဖျက်မှာ သေချာလား?')) return;
   await dbDel('lessons', id);
   await loadData(); renderLessons();
+  showToast('သင်ခန်းစာ ဖျက်ပြီးပါပြီ');
 }
 
 async function editLesson(id) {
@@ -466,7 +459,6 @@ document.getElementById('addBtn').onclick = () => {
 
 document.getElementById('cancelBtn').onclick = () => document.getElementById('modal').classList.remove('show');
 
-// Image Upload Logic (ဖုန်း Storage နဲ့ ချိတ်ဆက်ရန် ပြင်ဆင်ထားသည်)
 document.getElementById('photo').onchange = e => {
   const file = e.target.files[0];
   if (!file) return;
@@ -503,13 +495,15 @@ document.getElementById('saveBtn').onclick = async () => {
   const date = document.getElementById('lessonDate').value;
   const note = document.getElementById('note').value.trim();
   
-  if (!subjectId || !title || !date) return alert('အကွက်အားလုံး ဖြည့်ပါ။');
+  if (!subjectId || !title || !date) return showToast('ဘာသာရပ်၊ ခေါင်းစဉ်နှင့် ရက်စွဲ ဖြည့်ပါ');
   
   if (id) {
     const existing = await dbGet('lessons', Number(id));
     await dbPut('lessons', { ...existing, subjectId, title, date, note, photo: editingImageData });
+    showToast('ပြင်ဆင်ပြီးပါပြီ');
   } else {
     await dbAdd('lessons', { subjectId, title, date, note, photo: editingImageData, done: 0, createdAt: Date.now() });
+    showToast('သင်ခန်းစာ သိမ်းပြီးပါပြီ');
   }
   await loadData();
   renderLessons();
@@ -527,4 +521,130 @@ function openSubjectModal() {
         <div class="subj-grade">${s.grade || ''}</div>
       </div>
       <span class="subj-count">${cnt} ခု</span>
-      <button class="btn
+      <button class="btn-icon danger" onclick="deleteSubject(${s.id})">🗑️</button>
+    </div>`;
+  }).join('');
+  document.getElementById('subjectModal').classList.add('show');
+}
+
+document.getElementById('closeSubjectBtn').onclick = () => document.getElementById('subjectModal').classList.remove('show');
+
+document.getElementById('addSubjectBtn').onclick = async () => {
+  const name = document.getElementById('newSubjectName').value.trim();
+  const icon = document.getElementById('newSubjectIcon').value.trim() || '📘';
+  const grade = document.getElementById('newSubjectGrade').value.trim();
+  if (!name) return showToast('ဘာသာရပ် အမည် ထည့်ပါ');
+  await dbAdd('subjects', { name, icon, grade, createdAt: Date.now() });
+  document.getElementById('newSubjectName').value = '';
+  await loadData();
+  openSubjectModal();
+  renderTabs();
+  showToast('ဘာသာရပ် ထည့်ပြီးပါပြီ');
+};
+
+async function deleteSubject(id) {
+  if (!confirm('ဘာသာရပ်နဲ့ သက်ဆိုင်တဲ့ သင်ခန်းစာတွေပါ ဖျက်မှာလား?')) return;
+  const rel = lessons.filter(l => l.subjectId === id);
+  for (const l of rel) await dbDel('lessons', l.id);
+  await dbDel('subjects', id);
+  await loadData();
+  openSubjectModal();
+  renderTabs();
+  renderLessons();
+  showToast('ဘာသာရပ် ဖျက်ပြီးပါပြီ');
+}
+
+document.getElementById('gradeBtn').onclick = () => {
+  const grades = [...new Set(subjects.map(s => s.grade).filter(Boolean))];
+  let html = `<div class="menu-item" onclick="setGrade('all')"><span class="menu-icon">📚</span><div class="menu-text">အားလုံး</div></div>`;
+  html += grades.map(g => `<div class="menu-item" onclick="setGrade('${g}')"><span class="menu-icon">🎓</span><div class="menu-text">${g}</div></div>`).join('');
+  document.getElementById('gradeList').innerHTML = html;
+  document.getElementById('gradeModal').classList.add('show');
+};
+
+function setGrade(g) {
+  currentGrade = g;
+  currentFilter = 'all';
+  document.getElementById('gradeBtn').textContent = `📚 အတန်း: ${g === 'all' ? 'အားလုံး' : g}`;
+  document.getElementById('gradeModal').classList.remove('show');
+  renderTabs();
+  renderLessons();
+}
+
+document.getElementById('closeGradeBtn').onclick = () => document.getElementById('gradeModal').classList.remove('show');
+
+document.getElementById('menuBtn').onclick = () => document.getElementById('menuModal').classList.add('show');
+document.getElementById('closeMenuBtn').onclick = () => document.getElementById('menuModal').classList.remove('show');
+document.getElementById('backupBtn').onclick = () => {
+  const data = { subjects, lessons };
+  const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `backup-${todayISO()}.json`;
+  a.click();
+  showToast('Backup ဖိုင် ထုတ်ယူပြီးပါပြီ');
+};
+document.getElementById('restoreBtn').onclick = () => document.getElementById('restoreInput').click();
+document.getElementById('restoreInput').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  const data = JSON.parse(text);
+  await dbClear('lessons'); await dbClear('subjects');
+  for (const s of data.subjects) await dbAdd('subjects', s);
+  for (const l of data.lessons) await dbAdd('lessons', l);
+  await loadData(); renderTabs(); renderLessons();
+  document.getElementById('menuModal').classList.remove('show');
+  showToast('ဒေတာ ပြန်ထည့်ပြီးပါပြီ');
+};
+document.getElementById('clearAllBtn').onclick = async () => {
+  if (!confirm('အားလုံး ဖျက်မှာ သေချာလား?')) return;
+  await dbClear('lessons'); await dbClear('subjects');
+  await loadData(); renderTabs(); renderLessons();
+  document.getElementById('menuModal').classList.remove('show');
+  showToast('ဒေတာ အားလုံး ဖျက်ပြီးပါပြီ');
+};
+
+document.getElementById('searchInput').oninput = function() {
+  searchQuery = this.value.trim();
+  document.getElementById('clearSearchBtn').classList.toggle('show', !!searchQuery);
+  renderLessons();
+};
+document.getElementById('clearSearchBtn').onclick = () => {
+  document.getElementById('searchInput').value = '';
+  searchQuery = '';
+  document.getElementById('clearSearchBtn').classList.remove('show');
+  renderLessons();
+};
+
+document.getElementById('viewerClose').onclick = () => {
+  document.getElementById('viewer').classList.remove('show');
+  document.getElementById('viewerImg').src = '';
+};
+
+// ============================================================
+// Init
+// ============================================================
+(async () => {
+  try {
+    db = await initDB();
+    await loadData();
+    if (!subjects.length) {
+      await dbAdd('subjects', { name: 'မြန်မာစာ', icon: '🇲🇲', grade: '', createdAt: Date.now() });
+      await dbAdd('subjects', { name: 'English', icon: '🔤', grade: '', createdAt: Date.now() });
+      await dbAdd('subjects', { name: 'သင်္ချာ', icon: '🔢', grade: '', createdAt: Date.now() });
+      await loadData();
+    }
+    document.getElementById('loading').style.display = 'none';
+    renderDate();
+    renderTabs();
+    renderLessons();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('loading').style.display = 'none';
+    alert('Database ဖွင့်လို့မရပါ။ Browser ကို ပြန်ဖွင့်ကြည့်ပါ သို့မဟုတ် Incognito နဲ့ စမ်းပါ။');
+  }
+})();
+</script>
+</body>
+</html>
